@@ -51,7 +51,7 @@ const emailVerificationEmail = async ({
 	const html = compiledTemplate({ name: firstName, otp });
 
 	const mailOptions = {
-		from: process.env.MAIL_USER as string,
+		from: "E-Commerce Team",
 		to: email,
 		subject: "Verify Your Email",
 		html,
@@ -63,6 +63,13 @@ const emailVerificationEmail = async ({
 			throw Error("An error occured! Verification email not sent");
 		}
 	});
+};
+
+const passwordResetEmail = async (
+	{ _id, email, firstName }: IEmailSendParams,
+	res: Response
+) => {
+	res.send("Password reset Email sent!");
 };
 
 const sendNewUserMails = async (
@@ -82,6 +89,4 @@ const sendNewUserMails = async (
 	}
 };
 
-// welcomeEmail()
-
-export { sendNewUserMails };
+export { sendNewUserMails, emailVerificationEmail, passwordResetEmail };
