@@ -4,7 +4,7 @@ html
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(href="https://fonts.cdnfonts.com/css/ibm-plex-sans", rel="stylesheet")
-    title Welcome to Shop, #{name}
+    title Verify Your Email
     style(type="text/css").
       *{
         padding: 0 !important;
@@ -48,6 +48,7 @@ html
       }
       .otp {
         font-size: 2rem;
+        font-weight: 700 !important;
       }
       .message-text {
         font-size: 14.5px;
@@ -56,7 +57,7 @@ html
         line-height: 26px;
         margin-top: 25px !important;
       }
-      .highlight {
+      .hlight {
         color: #338470;
       }
       .email-link {
@@ -65,9 +66,10 @@ html
         font-weight: 500;
       }
       .end-greeting {
-        font-size: 14.5px;
+        font-size: 16px;
         font-weight: 400 !important;
         color: #5C5C80;
+        line-height: 18px;
       }
       .disclaimer {
         font-size: 14px;
@@ -88,27 +90,30 @@ html
     .container 
       .mail-body 
         .content 
-          h1.logo 🛒 E-Commerce
+          h1.logo 🛒 E-Commerce  
+          br
           h2.title Verify Your Email
+          br
           h2.name Hello #{name},  
           p.message-text
             | Thank you for registering on E-Commerce! To enjoy the full functions of our platform, you just need to verify that this is you.
           p.message-text
             | Enter the 4-digit code below to verify your identity and continue shopping on E-Commerce 
           br
-          b.otp.highlight #{otp}
+          p.otp.hlight #{otp}
+          br
           p.message-text
             | This code will expire in
-            span.highlight  24
-            |  hours.
+            span.hlight  24 hours.  
+          br
+          p.end-greeting Happy Shopping! 
+          p.end-greeting The E-Commerce Team 
+          br
           br
           p.message-text
             | If you have any questions, concerns, or need assistance, our dedicated support team is here to help. Please don't
             | hesitate to reach out to us at  
             a.email-link(href='mailto:support@ecommerce.com') support@ecommerce.com.
-          br
-          p.end-greeting Happy Shopping! 
-          p.end-greeting The E-Commerce Team 
           br
           hr
           br
