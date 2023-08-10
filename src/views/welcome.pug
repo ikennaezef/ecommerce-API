@@ -1,0 +1,97 @@
+html 
+  head 
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(href="https://fonts.cdnfonts.com/css/ibm-plex-sans", rel="stylesheet")
+    title Welcome to Shop, #{name}
+    style(type="text/css").
+      *{
+        padding: 0 !important;
+        margin: 0 !important;
+        font-family: 'IBM Plex Sans', sans-serif;
+      }
+      .container {
+        width: 100% !important;
+        padding-bottom: 50px !important;
+      }
+      .mail-body {
+        color: #5C5C80 !important;
+        width: 600px;
+        margin-right: auto !important;
+        margin-left: auto !important;
+        display: block;
+      }
+      .header-image {
+        height: 200px !important;
+        width: 100% !important;
+        object-fit: cover;
+      }
+      .content {
+        padding: 1rem !important;
+      }
+      .name {
+        color: #5C5C80;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        margin-bottom: 10px !important;
+      }
+      .greeting{
+        color: #018c40 !important;
+        font-size: 20px;
+        font-weight: 700 !important;
+        margin-top: 30px !important;
+      }
+      .message-text {
+        font-size: 14.5px;
+        font-weight: 400 !important;
+        color: #5C5C80;
+        line-height: 26px;
+        margin-top: 25px !important;
+      }
+      .email-link {
+        color: #338470;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .owner-name {
+        color: #4A4A4A;
+        font-size: 17px;
+        font-weight: 600 !important;
+      }
+      .owner-position {
+        color: #5C5C80;
+        font-size: 17px;
+        font-weight: 500 !important;
+      }
+      @media (max-width: 768px) {
+        .email-wrapper {
+          width: 500px;
+        }
+      }
+      @media (max-width: 600px) {
+        .email-wrapper {
+          width: auto;
+        }
+      }
+
+  body 
+    .container 
+      .mail-body 
+        img(src="https://firebasestorage.googleapis.com/v0/b/socialstream-ba300.appspot.com/o/ecommerce_files%2Fshopper.jpg?alt=media&token=bd3e3a65-8b57-43d2-a290-f9a9ac42de0b", alt="").header-image
+        .content 
+          h2.name Hi #{name}, 
+          h3.greeting Welcome to E-Commerce! It's great to have you with us 
+          p.message-text
+            | E-Commerce is an e-commerce platform that offers a wide range of gadgets and electronic products. We aim to provide you
+            | with a seamless shopping experience and access to the latest tech innovations.
+          p.message-text
+            | If you have any questions, concerns, or need assistance, our dedicated support team is here to help. Please don&apos;t
+            | hesitate to reach out to us at  
+            a.email-link(href='mailto:support@ecommerce.com') support@ecommerce.com.
+          p.message-text Happy Shopping! 
+          br
+          hr
+          p.message-text Warm Regards,
+          p.owner-name Ikenna Eze 
+          p.owner-position CEO, E-Commerce
