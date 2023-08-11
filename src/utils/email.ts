@@ -25,9 +25,9 @@ const welcomeEmail = async (email: string, firstName: string) => {
 	const html = compiledTemplate({ name: firstName });
 
 	const mailOptions = {
-		from: process.env.MAIL_USER as string,
+		from: "E-Commerce Team",
 		to: email,
-		subject: "Welcome To E-Commerce",
+		subject: "Welcome To E-Commerce 🚀",
 		html,
 	};
 
@@ -53,7 +53,7 @@ const emailVerificationEmail = async ({
 	const mailOptions = {
 		from: "E-Commerce Team",
 		to: email,
-		subject: "Verify Your Email",
+		subject: "Verify Your Email | E-Commerce",
 		html,
 	};
 
@@ -69,7 +69,36 @@ const passwordResetEmail = async (
 	{ _id, email, firstName }: IEmailSendParams,
 	res: Response
 ) => {
-	res.send("Password reset Email sent!");
+	const otp = await createOTP(_id, 600000); // 10 mins validity
+
+	const filePath = path.join(__dirname, "../views/password-reset.pug");
+	const compiledTemplate = pug.compileFile(filePath);
+	const html = compiledTemplate({ name: firstName, otp });
+
+	const mailOptions = {
+		from: "E-Commerce Team",
+		to: email,
+		subject: "🔐 Password Reset | E-Commerce",
+		html,
+	};
+
+	transporter.sendMail(mailOptions, (err, info) => {
+		if (err) {
+			console.log("An error occured:", err.message);
+			return res
+				.status(500)
+				.json({ message: "An error occured, email not sent!" });
+		} else {
+			res.status(200).json({
+				message:
+					"An OTP has been sent to your email. Use it to reset your password",
+				data: {
+					_id,
+					email,
+				},
+			});
+		}
+	});
 };
 
 const sendNewUserMails = async (

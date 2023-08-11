@@ -30,7 +30,7 @@ const verifyOTP = async (userId: string, otp: string) => {
 
 	const otpExists = await OtpVerification.findOne({ userId });
 	if (!otpExists) {
-		throw Error("Record does not exist! Please register or login.");
+		throw Error("Record does not exist!");
 	}
 
 	if (new Date(Date.now()) > otpExists.expiresAt) {
