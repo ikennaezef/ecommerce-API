@@ -10,6 +10,7 @@ import {
 import { createToken } from "../utils/jwt";
 import { verifyOTP } from "../utils/otp";
 import { ExpressRequest } from "../interfaces";
+import { errorHandler } from "../middleware/error-handler";
 
 const login = async (req: Request, res: Response) => {
 	try {
@@ -46,7 +47,7 @@ const login = async (req: Request, res: Response) => {
 			verified: user.verified,
 		});
 	} catch (error: any) {
-		return res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -88,7 +89,7 @@ const register = async (req: Request, res: Response) => {
 			res
 		);
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -118,7 +119,7 @@ const verifyUser = async (req: Request, res: Response) => {
 				.json({ message: "User verification successful!", verified: true });
 		}
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -130,15 +131,34 @@ const changePassword = async (req: ExpressRequest, res: Response) => {
 			.json({ message: "Old password and new password are required!" });
 	}
 
-	const tokenUser = req.user;
-	console.log(tokenUser);
+	const tokenUserId = req.user?.userId;
 
-	// try {
-	// } catch (error: any) {
-	// 	res.status(500).json({ message: error.message });
-	// }
+	try {
+		const user = await User.findById(tokenUserId);
+		if (!user) {
+			return res.status(404).json({ message: "User does not exist!" });
+		}
 
-	res.send("Change Password");
+		const oldPasswordsMatch = await bcrypt.compare(oldPassword, user.password!);
+		if (!oldPasswordsMatch) {
+			return res.status(400).json({ message: "Incorrect old password!" });
+		}
+
+		if (newPassword.length < 8) {
+			return res.status(400).json({ message: "Password is too short!" });
+		}
+
+		const hashedPassword = await bcrypt.hash(newPassword, 10);
+		await User.findByIdAndUpdate(
+			tokenUserId,
+			{ password: hashedPassword },
+			{ new: true }
+		);
+
+		res.status(200).json({ message: "Password change successful!" });
+	} catch (error: any) {
+		errorHandler(error, req, res);
+	}
 };
 
 const resendOTP = async (req: Request, res: Response) => {
@@ -160,7 +180,7 @@ const resendOTP = async (req: Request, res: Response) => {
 		});
 		res.status(200).json({ message: "An OTP has been resent to your email" });
 	} catch (error: any) {
-		return res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -182,7 +202,7 @@ const forgotPassword = async (req: Request, res: Response) => {
 			res
 		);
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -214,7 +234,7 @@ const verifyPasswordReset = async (req: Request, res: Response) => {
 			});
 		}
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
@@ -255,7 +275,7 @@ const resetPassword = async (req: ExpressRequest, res: Response) => {
 			message: "Password reset successful! Proceed to login.",
 		});
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
+		errorHandler(error, req, res);
 	}
 };
 
