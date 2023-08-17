@@ -19,11 +19,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const uploadImage = async (req: ExpressRequest) => {
 	try {
-		const { picturePath } = req.body;
-		if (!picturePath) {
-			throw Error("Picture path is required!");
-		}
-
 		if (!req.file) {
 			throw Error("No file uploaded!");
 		}
