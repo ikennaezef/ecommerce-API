@@ -199,7 +199,60 @@ const updateProduct = async (req: ExpressRequest, res: Response) => {
 		params: { id: productId },
 	} = req;
 
-	res.send("Update product!");
+	try {
+		const product = await Product.findById(productId);
+		if (!product) {
+			return res.status(404).json({ message: "Product not found!" });
+		}
+
+		let newSlug = null;
+		if (name) {
+			newSlug = slugify(name, { lower: true });
+		}
+
+		const updateData: any = {
+			name,
+			description,
+			category,
+			company: company?.toLowerCase(),
+		};
+
+		if (name) {
+			updateData.slug = newSlug;
+		}
+
+		if (price) {
+			updateData.price = Number(price);
+		}
+		if (inventory) {
+			updateData.inventory = Number(inventory);
+		}
+
+		// If updating the image
+		if (req.file) {
+			await uploadImage(req);
+			await deleteImage(product.image!); // Delete the initial product image after uploading a new one
+			updateData.image = req.image;
+		}
+
+		const productUpdate = await Product.findByIdAndUpdate(
+			productId,
+			updateData,
+			{ new: true, runValidators: true }
+		);
+
+		if (!productUpdate) {
+			return res
+				.status(500)
+				.json({ message: "An error occured! Could not update product." });
+		}
+
+		res
+			.status(200)
+			.json({ message: "Product updated successfully!", data: productUpdate });
+	} catch (error: any) {
+		errorHandler(error, req, res);
+	}
 };
 
 const deleteProduct = async (req: Request, res: Response) => {
@@ -226,6 +279,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 export {
 	createProduct,
 	deleteProduct,
+	updateProduct,
 	getAllProducts,
 	getSingleProduct,
 	getProductByCategory,

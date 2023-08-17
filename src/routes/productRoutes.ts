@@ -10,6 +10,7 @@ import {
 	getProductByCompany,
 	getSingleProduct,
 	searchProduct,
+	updateProduct,
 } from "../controllers/productControllers";
 
 const router = Router();
@@ -25,8 +26,16 @@ router.get("/all", checkAuthorization, checkAdmin, getAllProducts);
 router.get("/category", getProductByCategory);
 router.get("/company", getProductByCompany);
 router.get("/search", searchProduct);
-router.get("/search", searchProduct);
 router.get("/filter", filterProducts);
-router.delete("/:id", checkAuthorization, checkAdmin, deleteProduct);
+router
+	.route("/:id")
+	.get(getSingleProduct)
+	.patch(
+		checkAuthorization,
+		checkAdmin,
+		upload.single("picture"),
+		updateProduct
+	)
+	.delete(checkAuthorization, checkAdmin, deleteProduct);
 
 export default router;
