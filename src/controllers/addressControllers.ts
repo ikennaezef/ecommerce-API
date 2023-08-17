@@ -40,7 +40,12 @@ const getUserAddresses = async (req: ExpressRequest, res: Response) => {
 		const userId = req.user?.userId;
 		const userAddresses = await Address.find({ userId });
 
-		res.status(200).json({ message: "Success!", data: userAddresses });
+		res
+			.status(200)
+			.json({
+				message: "Success!",
+				data: { addresses: userAddresses, count: userAddresses.length },
+			});
 	} catch (error: any) {
 		errorHandler(error, req, res);
 	}
@@ -49,7 +54,25 @@ const getUserAddresses = async (req: ExpressRequest, res: Response) => {
 const getAllAddresses = async (req: Request, res: Response) => {
 	try {
 		const addresses = await Address.find({});
-		res.status(200).json({ message: "Success!", data: addresses });
+		res.status(200).json({
+			message: "Success!",
+			data: { addresses, count: addresses.length },
+		});
+	} catch (error: any) {
+		errorHandler(error, req, res);
+	}
+};
+
+const getSingleAddress = async (req: ExpressRequest, res: Response) => {
+	const { id } = req.params;
+
+	try {
+		const address = await Address.findById(id);
+		if (!address) {
+			return res.status(404).json({ message: "Address not found!" });
+		}
+
+		return res.status(200).json({ message: "Success!", data: address });
 	} catch (error: any) {
 		errorHandler(error, req, res);
 	}
@@ -100,6 +123,7 @@ export {
 	createAddress,
 	getAllAddresses,
 	getUserAddresses,
+	getSingleAddress,
 	updateAddress,
 	deleteAddress,
 };
