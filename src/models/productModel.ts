@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
 	},
 	slug: {
 		type: String,
+		unique: true,
 		required: true,
 	},
 	price: {
@@ -31,7 +32,7 @@ const productSchema = new mongoose.Schema({
 	category: {
 		type: String,
 		required: [true, "Product category is required!"],
-		enum: ["phone", "electronics", "computers", "accessories"],
+		enum: ["phones", "electronics", "computers", "accessories"],
 	},
 	company: {
 		type: String,
