@@ -123,44 +123,6 @@ const verifyUser = async (req: Request, res: Response) => {
 	}
 };
 
-const changePassword = async (req: ExpressRequest, res: Response) => {
-	const { oldPassword, newPassword } = req.body;
-	if (!oldPassword || !newPassword) {
-		return res
-			.status(400)
-			.json({ message: "Old password and new password are required!" });
-	}
-
-	const tokenUserId = req.user?.userId;
-
-	try {
-		const user = await User.findById(tokenUserId);
-		if (!user) {
-			return res.status(404).json({ message: "User does not exist!" });
-		}
-
-		const oldPasswordsMatch = await bcrypt.compare(oldPassword, user.password!);
-		if (!oldPasswordsMatch) {
-			return res.status(400).json({ message: "Incorrect old password!" });
-		}
-
-		if (newPassword.length < 8) {
-			return res.status(400).json({ message: "Password is too short!" });
-		}
-
-		const hashedPassword = await bcrypt.hash(newPassword, 10);
-		await User.findByIdAndUpdate(
-			tokenUserId,
-			{ password: hashedPassword },
-			{ new: true }
-		);
-
-		res.status(200).json({ message: "Password change successful!" });
-	} catch (error: any) {
-		errorHandler(error, req, res);
-	}
-};
-
 const resendOTP = async (req: Request, res: Response) => {
 	const { email } = req.body;
 	if (!email) {
@@ -283,7 +245,6 @@ export {
 	login,
 	register,
 	resendOTP,
-	changePassword,
 	forgotPassword,
 	verifyUser,
 	resetPassword,
