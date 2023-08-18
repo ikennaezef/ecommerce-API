@@ -111,7 +111,8 @@ const sendNewUserMails = async (
 
 		res.status(201).json({
 			status: "PENDING",
-			message: "An OTP has been sent to your email.",
+			message:
+				"User registration successful! An OTP has been sent to your email.",
 		});
 	} catch (error: any) {
 		res.status(500).json({ message: error.message });

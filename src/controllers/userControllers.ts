@@ -76,13 +76,16 @@ const searchUser = async (req: ExpressRequest, res: Response) => {
 	}
 
 	try {
-		const results = await User.find({
-			$or: [
-				{ firstName: { $regex: query, $options: "i" } },
-				{ lastName: { $regex: query, $options: "i" } },
-				{ email: { $regex: query, $options: "i" } },
-			],
-		});
+		const results = await User.find(
+			{
+				$or: [
+					{ firstName: { $regex: query, $options: "i" } },
+					{ lastName: { $regex: query, $options: "i" } },
+					{ email: { $regex: query, $options: "i" } },
+				],
+			},
+			{ password: 0 }
+		);
 
 		res
 			.status(200)
