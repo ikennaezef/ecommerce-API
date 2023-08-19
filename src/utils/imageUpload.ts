@@ -23,6 +23,16 @@ const uploadImage = async (req: ExpressRequest) => {
 			throw Error("No file uploaded!");
 		}
 
+		if (!req.file.mimetype.startsWith("image")) {
+			throw Error("Please upload an image file");
+		}
+
+		const maxSize = 1024 * 1024; // 1MB max size
+
+		if (req.file.size > maxSize) {
+			throw Error("Please upload image smaller than 1MB");
+		}
+
 		const dateTime = new Date().toISOString();
 
 		const storageRef = ref(
