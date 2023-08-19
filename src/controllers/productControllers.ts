@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
 import Product from "../models/productModel";
-import { ExpressRequest, QueryObject } from "../interfaces";
+import { ExpressRequest } from "../interfaces";
 import { errorHandler } from "../middleware/error-handler";
 import { deleteImage, uploadImage } from "../utils/imageUpload";
 import Review from "../models/reviewModel";
@@ -39,8 +39,8 @@ const createProduct = async (req: ExpressRequest, res: Response) => {
 		res
 			.status(201)
 			.json({ message: "Product created successfully!", data: newProduct });
-	} catch (error: any) {
-		errorHandler(error, req, res);
+	} catch (err: any) {
+		errorHandler(err, req, res);
 	}
 };
 
