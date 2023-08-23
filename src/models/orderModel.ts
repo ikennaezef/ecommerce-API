@@ -8,7 +8,7 @@ const cartItemSchema = new mongoose.Schema({
 	quantity: {
 		type: Number,
 		required: true,
-		min: 1,
+		min: [1, "Product quantity can't be less than 1!"],
 		default: 1,
 	},
 	price: {
@@ -33,6 +33,15 @@ const orderSchema = new mongoose.Schema({
 		ref: "User",
 		required: [true, "Buyer Id is required!"],
 	},
+	buyerEmail: {
+		type: String,
+		required: [true, "Buyer email is required!"],
+	},
+	addressId: {
+		type: mongoose.Types.ObjectId,
+		ref: "addressId",
+		required: [true, "Address Id is required!"],
+	},
 	shippingFee: {
 		type: Number,
 		required: [true, "Shipping fee is required!"],
@@ -52,7 +61,8 @@ const orderSchema = new mongoose.Schema({
 	status: {
 		type: String,
 		required: [true, "Order status is required!"],
-		enum: ["pending", "processing", "failed", "delivered"],
+		enum: ["pending", "processing", "cancelled", "delivered"],
+		default: "pending",
 	},
 });
 
